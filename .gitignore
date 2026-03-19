@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.env
+*.faiss
+*.pkl
+mlruns/
+.DS_Store
+data/
+*.pdf

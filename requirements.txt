@@ -1,0 +1,10 @@
+pymupdf 
+sentence-transformers 
+faiss-cpu 
+rank-bm25 
+fastapi 
+uvicorn 
+pydantic 
+jinja2 
+httpx 
+python-dotenv
