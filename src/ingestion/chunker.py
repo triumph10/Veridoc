@@ -17,3 +17,20 @@ def chunk_text(text: str,threshold: float=0.5) -> list[str]:
     
     sentences = [s.strip() for s in text.split(".") if s.strip()]
     embeddings = model.encode(sentences)
+    
+    chunks = []
+    current_chunk = [sentences[0]]  #initialize
+    
+    for i in range(1,len(sentences)): # compare each sentence with prev
+        sim = cosine_similarity(embeddings[i-1].reshape(1,-1),
+                                embeddings[i].reshape(1,-1))[0][0]
+        
+        if sim < threshold: # if similarity is low, start a new chunk
+            chunks.append(" ".join(current_chunk)+ ".") 
+            current_chunk = [sentences[i]]
+            
+        else: # if similarity is high, add to current chunk
+            current_chunk.append(sentences[i])
+        
+    chunks.append(". ".join(current_chunk) + ".")
+    return chunks
