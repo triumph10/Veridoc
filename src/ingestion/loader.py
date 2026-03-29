@@ -4,7 +4,7 @@ from pathlib import Path
 
 def load_pdf(filepath: str) -> list[dict]:
     path = Path(filepath)
-    
+        
     if not path.exists():
         raise FileNotFoundError(f"No file found at {filepath}")
     
