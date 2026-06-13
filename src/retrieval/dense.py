@@ -6,8 +6,8 @@ import faiss
 def build_index(chunks : list[dict]) -> tuple[faiss.IndexFlatL2, list[dict]]:
     """embed chunks and store in faiss index"""
     model = SentenceTransformer('all-MiniLM-L6-v2') #creates an embedding model using pre trained model
-    text = [chunk["chunk"] for chunk in chunks] #extracts the text from the chunks
-    embeddings = model.encode(text,   show_progress_bar = True) #creates embeddings for the text
+    texts = [chunk["chunk"] for chunk in chunks] #extracts the text from the chunks
+    embeddings = model.encode(texts,  show_progress_bar = True) #creates embeddings for the text
     embeddings = np.array(embeddings).astype('float32') #converts the embeddings to a numpy array of type float32
     dimension = embeddings.shape[1] #gets the dimension of the embeddings
     index = faiss.IndexFlatL2(dimension) #creates a faiss index for the embeddings

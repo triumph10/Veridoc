@@ -48,3 +48,38 @@ Cross-encoder reads query and chunk together in one pass — much more accurate
 relevance scoring. MiniLM is small enough to run on CPU under 200ms for 5 
 chunks. Cohere API rejected — adds cost and external dependency. Without 
 reranker faithfulness scores drop significantly based on ablation results.
+
+## Generation: local Ollama vs OpenAI API
+
+Chose: Ollama with Mistral-7B running locally
+Rejected: OpenAI GPT-4 API
+
+Why: Local LLM means zero API cost, unlimited ablation runs, no data privacy 
+concerns, and reproducible results with fixed seed. Quality tradeoff is real 
+— Mistral-7B is weaker than GPT-4 — but acceptable for a portfolio project 
+where the RAG architecture is being evaluated, not the LLM itself.
+
+## Prompt design: context-only with source attribution
+
+Why: Jinja2 template explicitly instructs the LLM to answer only from provided 
+context. Each chunk labeled with source filename and page number makes answers 
+traceable and verifiable. This is the primary hallucination prevention mechanism.
+
+prompt.py takes your query and the retrieved chunks and builds a structured prompt using a Jinja2 template. The template tells the LLM to answer only from the provided context — this is what prevents hallucination. Each chunk is labeled with its source and page number so the answer is traceable.
+llm.py sends that prompt to Ollama running locally on your machine. Ollama hosts Mistral-7B and exposes it as a simple HTTP API on port 11434. We send the prompt, get the answer back as a string.
+qa.j2 is the actual prompt template. The {{ context }} and {{ query }} are Jinja2 placeholders that get filled in at runtime.
+
+
+## End to end pipeline design
+
+The pipeline connects every module in a single function: ingest → dense 
+retrieve → sparse retrieve → RRF fusion → rerank → generate.
+
+Ingestion happens at query time for now — not ideal for production where 
+you would pre-build the index once and save it to disk. Acceptable for 
+portfolio stage. Future improvement: persist FAISS index and BM25 index 
+to disk so ingest only runs once.
+
+The pipeline returns both the answer and the source chunks so the caller 
+always knows where the answer came from. Traceability is a core design 
+principle — every answer is grounded and attributable.
