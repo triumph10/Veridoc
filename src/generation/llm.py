@@ -8,7 +8,7 @@ def generate(prompt :  str,  model: str = "mistral") -> str:
             "prompt" : prompt,
             "stream": False
         },
-        timeout = 60.0
+        timeout = 300.0
     )
     
     

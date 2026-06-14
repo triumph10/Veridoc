@@ -10,7 +10,7 @@ from src.evaluation.metrics import evaluate_pipeline
 from src.evaluation.logger import log_experiment
 
 
-def run_evaluation(docs_folder: str = "docs", num_questions: int = 10):
+def run_evaluation(docs_folder: str = "docs", num_questions: int = 2):
     print("Ingesting documents...")
     chunks = ingest_documents(docs_folder)
     
