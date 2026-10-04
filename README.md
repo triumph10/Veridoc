@@ -48,7 +48,7 @@ See full ablation results in [reports/ablation_report.md](reports/ablation_repor
 ## Run locally
 
 ```bash
-git clone https://github.com/YOURUSERNAME/veridoc
+git clone https://github.com/triumph10/veridoc
 cd veridoc
 python -m venv .venv
 .venv\Scripts\activate
